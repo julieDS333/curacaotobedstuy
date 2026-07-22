@@ -83,6 +83,13 @@ var App = (function(){
     s.className = "";
     void s.offsetWidth;
     s.className = "fade";
+
+    if(idx > 0){
+      var b = el("button","back","\u2190 back");
+      b.addEventListener("click", prev);
+      s.appendChild(b);
+    }
+
     g.mount(s, API);
     progress();
     window.scrollTo(0, 0);
@@ -93,6 +100,13 @@ var App = (function(){
     if(i >= 0) idx = i;
     save();
     render(id);
+  }
+
+  function prev(){
+    if(idx <= 0) return;
+    idx = idx - 1;
+    save();
+    render(GAME_ORDER[idx]);
   }
 
   function next(){
@@ -173,8 +187,8 @@ var App = (function(){
 
   var API = {
     url: url, el: el, img: img, plate: plate, carlos: carlos, stage: stage,
-    button: button, shuffle: shuffle, next: next, go: go, fail: fail,
-    cameo: cameo, reset: reset
+    button: button, shuffle: shuffle, next: next, prev: prev, go: go,
+    fail: fail, cameo: cameo, reset: reset
   };
 
   function boot(){
@@ -184,7 +198,7 @@ var App = (function(){
     render(GAME_ORDER[idx]);
   }
 
-  return { boot: boot, go: go, next: next, reset: reset, api: API };
+  return { boot: boot, go: go, next: next, prev: prev, reset: reset, api: API };
 })();
 
 window.GAMES = window.GAMES || {};
