@@ -44,31 +44,32 @@ window.GAMES.trash = {
         ok:"July. Hurry up girl." }
     ];
 
+    /* 10 pieces scattered around the room */
     var SPOTS = [
-      { img:A.trash[0], left:"6%",  top:"52%" },
-      { img:A.trash[1], left:"36%", top:"64%" },
-      { img:A.trash[2], left:"64%", top:"48%" },
-      { img:A.trash[3], left:"18%", top:"22%" },
-      { img:A.trash[0], left:"72%", top:"72%" }
+      { left:"5%",  top:"58%" }, { left:"22%", top:"70%" },
+      { left:"38%", top:"55%" }, { left:"54%", top:"72%" },
+      { left:"70%", top:"60%" }, { left:"84%", top:"48%" },
+      { left:"14%", top:"30%" }, { left:"46%", top:"26%" },
+      { left:"66%", top:"34%" }, { left:"30%", top:"44%" }
     ];
 
     var i = 0;
+    var perQ = Math.ceil(SPOTS.length / QUESTIONS.length);
 
     root.appendChild(api.plate(4, "The Living Room",
-      "Bed Stuy, interior — refuse, questions, one woman"));
+      "Bed Stuy, interior \u2014 refuse, questions, one woman"));
 
     var s = api.stage();
     root.appendChild(s);
 
-    /* room */
     var room = api.el("div","room");
-    var bg = api.img(A.livingroom, "bg");
-    room.appendChild(bg);
+    room.appendChild(api.img(A.livingroom, "bg"));
 
-    var junk = SPOTS.map(function(sp){
-      var j = api.img(sp.img, "junk");
+    var junk = SPOTS.map(function(sp, n){
+      var j = api.img(A.trash[n % A.trash.length], "junk");
       j.style.left = sp.left;
       j.style.top = sp.top;
+      j.style.transform = "rotate(" + (Math.random()*40 - 20).toFixed(0) + "deg)";
       room.appendChild(j);
       return j;
     });
@@ -77,9 +78,9 @@ window.GAMES.trash = {
     var count = api.el("div","counter", SPOTS.length + " pieces of trash");
     s.appendChild(count);
 
-    var carlosBox = api.carlos("Answer correctly and the room cleans itself. That is not how cleaning works, but here we are.");
-    s.appendChild(carlosBox);
-    var say = carlosBox.querySelector(".say");
+    var line = api.el("div","note",
+      "Answer correctly and the room cleans itself. That is not how cleaning works.");
+    s.appendChild(line);
 
     var panel = api.el("div","choices");
     s.appendChild(panel);
@@ -87,32 +88,36 @@ window.GAMES.trash = {
     ask();
 
     function clean(){
-      if(junk[i]) junk[i].classList.add("gone");
-      var left = SPOTS.length - (i + 1);
+      var from = i * perQ;
+      for(var k = from; k < from + perQ && k < junk.length; k++){
+        (function(j, d){
+          setTimeout(function(){ j.classList.add("gone"); }, d * 140);
+        })(junk[k], k - from);
+      }
+      var left = Math.max(SPOTS.length - (i + 1) * perQ, 0);
       count.textContent = left === 0 ? "spotless" :
         left + (left === 1 ? " piece of trash" : " pieces of trash");
     }
 
     function talk(text){
-      say.textContent = text;
-      say.className = "say";
-      void say.offsetWidth;
-      say.className = "say fade";
+      line.textContent = text;
+      line.className = "note";
+      void line.offsetWidth;
+      line.className = "note fade";
     }
 
     function advance(){
       clean();
       i++;
-      if(i >= QUESTIONS.length){ setTimeout(finish, 700); }
-      else { setTimeout(ask, 700); }
+      if(i >= QUESTIONS.length){ setTimeout(finish, 900); }
+      else { setTimeout(ask, 900); }
     }
 
     function ask(){
       var Q = QUESTIONS[i];
       panel.innerHTML = "";
 
-      var q = api.el("div","q", Q.q);
-      panel.appendChild(q);
+      panel.appendChild(api.el("div","q", Q.q));
 
       if(Q.type === "text"){
         var input = api.el("input","field");
@@ -147,19 +152,16 @@ window.GAMES.trash = {
       s.innerHTML = "";
 
       var clean1 = api.img(A.livingroom, "photo");
-      clean1.style.maxHeight = "36vh";
+      clean1.style.maxHeight = "40vh";
       s.appendChild(clean1);
 
-      var line1 = api.el("div","q","\u201Cit smells so good in here\u201D");
-      s.appendChild(line1);
+      s.appendChild(api.el("div","q","\u201Cit smells so good in here\u201D"));
 
-      var bagWrap = api.el("div", null);
       var bag = api.img(A.itsMyTrash, "photo");
       bag.style.maxHeight = "26vh";
       bag.style.opacity = "0";
       bag.style.transition = "opacity .5s ease";
-      bagWrap.appendChild(bag);
-      s.appendChild(bagWrap);
+      s.appendChild(bag);
 
       var line2 = api.el("div","q","");
       s.appendChild(line2);
