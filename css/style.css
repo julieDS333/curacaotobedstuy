@@ -174,3 +174,24 @@ img.asset{max-width:100%;display:block}
 .chip{background:#fff;border:1px solid var(--ink);border-radius:20px;
   padding:6px 14px;font-family:var(--mono);font-size:11px;letter-spacing:.12em;
   text-transform:uppercase;color:var(--ink)}
+
+/* ---------- keep julie awake ---------- */
+.couch{position:relative;width:100%;max-width:460px;aspect-ratio:4/3;
+  border:1px solid var(--line);border-radius:8px;overflow:hidden;
+  background-size:cover;background-position:center}
+.couch .tv{position:absolute;inset:0;background-size:cover;background-position:center;
+  opacity:.32;transition:opacity .6s ease}
+.couch .sofa{position:absolute;bottom:0;left:0;width:100%;display:block}
+.couch .her{position:absolute;bottom:6%;left:50%;transform:translateX(-50%);
+  width:52%;cursor:pointer}
+.zzz{position:absolute;bottom:52%;left:66%;font-family:var(--serif);
+  font-size:34px;color:var(--ink);opacity:0;pointer-events:none}
+.zzz.on{animation:zzz 1.6s ease-out infinite}
+@keyframes zzz{
+  0%{opacity:0;transform:translateY(0) scale(.8)}
+  30%{opacity:1}
+  100%{opacity:0;transform:translateY(-40px) scale(1.3)}
+}
+.pips{display:flex;gap:8px}
+.pip{width:26px;height:3px;background:var(--line)}
+.pip.on{background:var(--accent)}
