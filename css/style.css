@@ -159,3 +159,18 @@ img.asset{max-width:100%;display:block}
   color:var(--paper);font-family:var(--sans);font-size:16px;
   padding:14px 22px;border-radius:8px}
 .linkbtn:active{opacity:.85}
+
+/* ---------- trash: full-bleed room ---------- */
+.roomfull{position:absolute;top:0;bottom:0;left:-22px;right:-22px;
+  background-size:cover;background-position:center;overflow:hidden}
+.roomfull .junk{position:absolute;width:12%;
+  transition:opacity .5s ease,transform .5s ease}
+.roomfull .junk.gone{opacity:0;transform:translateY(-26px) rotate(16deg)}
+.overlay{position:relative;z-index:2}
+.card{background:#fff;border:1px solid var(--ink);border-radius:10px;
+  padding:16px 18px;width:100%;max-width:420px;color:var(--ink)}
+.card.q{font-family:var(--serif);font-size:22px;line-height:1.25;text-align:center}
+.btn.white{background:#fff;color:var(--ink);border:1px solid var(--ink)}
+.chip{background:#fff;border:1px solid var(--ink);border-radius:20px;
+  padding:6px 14px;font-family:var(--mono);font-size:11px;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--ink)}
