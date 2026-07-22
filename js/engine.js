@@ -54,7 +54,28 @@ var App = (function(){
   function progress(){
     var pct = Math.round((idx / (GAME_ORDER.length - 1)) * 100);
     $("#journey-fill").style.width = pct + "%";
-    $("#journey-step").textContent = (current && current.short) ? current.short : "—";
+    $("#journey-step").textContent = (current && current.short) ? current.short : GAME_ORDER[idx];
+  }
+
+  /* nav strip: back + skip, on every screen */
+  function nav(box){
+    var bar = el("div","navbar");
+
+    if(idx > 0){
+      var b = el("button","back","\u2190 back");
+      b.addEventListener("click", prev);
+      bar.appendChild(b);
+    } else {
+      bar.appendChild(el("span","back",""));
+    }
+
+    if(idx < GAME_ORDER.length - 1){
+      var f = el("button","back","skip \u2192");
+      f.addEventListener("click", jumpNext);
+      bar.appendChild(f);
+    }
+
+    box.appendChild(bar);
   }
 
   function render(id){
@@ -62,34 +83,30 @@ var App = (function(){
       try { current.unmount(); } catch(e){}
     }
 
-    var g = window.GAMES[id];
-
-    if(!g){
-      console.warn("missing game:", id);
-      var box = $("#screen");
-      box.innerHTML = "";
-      box.appendChild(el("div","plate",
-        "<div class='no'>Not built yet</div><h1>" + id +
-        "</h1><p>This room is still under construction.</p>"));
-      var again = el("button","btn solid","Back to the start");
-      again.addEventListener("click", reset);
-      box.appendChild(again);
-      return;
-    }
-
-    current = g;
     var s = $("#screen");
     s.innerHTML = "";
     s.className = "";
     void s.offsetWidth;
     s.className = "fade";
 
-    if(idx > 0){
-      var b = el("button","back","\u2190 back");
-      b.addEventListener("click", prev);
-      s.appendChild(b);
+    var g = window.GAMES[id];
+
+    if(!g){
+      console.warn("missing game:", id);
+      current = null;
+      nav(s);
+      s.appendChild(el("div","plate",
+        "<div class='no'>Not built yet</div><h1>" + id +
+        "</h1><p>This room is still under construction.</p>"));
+      var st = stage();
+      st.appendChild(button("Back to the start","solid",reset));
+      s.appendChild(st);
+      progress();
+      return;
     }
 
+    current = g;
+    nav(s);
     g.mount(s, API);
     progress();
     window.scrollTo(0, 0);
@@ -109,16 +126,15 @@ var App = (function(){
     render(GAME_ORDER[idx]);
   }
 
-  function next(){
-    var n = Math.min(idx + 1, GAME_ORDER.length - 1);
-    if(!window.GAMES[GAME_ORDER[n]]){
-      render(GAME_ORDER[n]);
-      return;
-    }
-    idx = n;
+  /* testing jump: moves on even if the game isn't built */
+  function jumpNext(){
+    if(idx >= GAME_ORDER.length - 1) return;
+    idx = idx + 1;
     save();
     render(GAME_ORDER[idx]);
   }
+
+  function next(){ jumpNext(); }
 
   /* ---------- pistola fail ---------- */
   function fail(cb){
@@ -157,7 +173,7 @@ var App = (function(){
   function load(){
     try{
       var v = parseInt(localStorage.getItem("bedstuy"), 10);
-      if(!isNaN(v) && v >= 0 && v < GAME_ORDER.length && window.GAMES[GAME_ORDER[v]]) idx = v;
+      if(!isNaN(v) && v >= 0 && v < GAME_ORDER.length) idx = v;
       if(location.search.indexOf("reset") >= 0) idx = 0;
     }catch(e){}
   }
