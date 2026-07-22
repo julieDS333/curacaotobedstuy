@@ -61,8 +61,8 @@ body{
 
 /* ---------- carlos ---------- */
 .carlos{display:flex;gap:12px;align-items:flex-start;width:100%;max-width:460px;text-align:left}
-.carlos img{width:112px;height:auto;border-radius:0;object-fit:contain;
-  border:none;background:transparent;flex:none}
+.carlos img{width:56px;height:56px;border-radius:50%;object-fit:cover;
+  border:1px solid var(--line);flex:none;background:#fff}
 .carlos .say{font-family:var(--serif);font-size:21px;line-height:1.3;padding-top:6px}
 
 /* ---------- hud ---------- */
@@ -113,3 +113,14 @@ img.asset{max-width:100%;display:block}
   border-radius:4px;background:#fff}
 .buildframe img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain}
 .slots{font-family:var(--mono);font-size:12px;letter-spacing:.12em;color:var(--muted)}
+
+.back{position:absolute;top:-2px;left:0;font-family:var(--mono);font-size:11px;
+  letter-spacing:.12em;text-transform:uppercase;color:var(--muted);
+  background:none;border:none;padding:6px 0;cursor:pointer}
+.back:active{color:var(--ink)}
+.stack{position:relative;width:240px;height:160px;border:1px solid var(--line);
+  border-radius:4px;background:#fff;overflow:hidden}
+.stack img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain}
+.stack .empty{position:absolute;inset:0;display:flex;align-items:center;
+  justify-content:center;font-family:var(--mono);font-size:11px;
+  letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
