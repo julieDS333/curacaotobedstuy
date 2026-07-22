@@ -197,9 +197,11 @@ img.asset{max-width:100%;display:block}
 .pip.on{background:var(--accent)}
 
 /* ---------- pantone ---------- */
-.swatches{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;width:100%}
-.swatch{width:112px;border:1px solid var(--line);border-radius:6px;background:#fff;
-  padding:0;cursor:pointer;overflow:hidden;transition:transform .1s ease}
+.swatches{display:flex;gap:10px;justify-content:center;flex-wrap:nowrap;
+  width:100%;max-width:460px}
+.swatch{flex:1 1 0;min-width:0;max-width:140px;border:1px solid var(--line);
+  border-radius:6px;background:#fff;padding:0;cursor:pointer;overflow:hidden;
+  transition:transform .1s ease}
 .swatch img{width:100%;display:block}
 .swatch:active{transform:scale(.97)}
 .swatch.dim{opacity:.35}
