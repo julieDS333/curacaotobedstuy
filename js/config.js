@@ -10,7 +10,7 @@ var A = {
   doveEggs:    "dove eggs.png",
   eggsBird:    "eggsbird.png",
 
-  curacaoFlag: "Flag_of_Curaçao.svg.png",
+  curacaoFlag: "flagcuracao.png",
   nyFlag:      "ny flag.png",
   curShapes:   ["Curacaoshape1.png","curacaoshape2.png","curacaoshape3.png","curacaoshape4.png"],
   nyShapes:    ["nyshape1.png","nyshape2.png","nyshape3.png","nyshape4.png"],
