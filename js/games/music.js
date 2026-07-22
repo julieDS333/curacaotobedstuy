@@ -16,9 +16,17 @@ window.GAMES.music = {
     link.style.maxWidth = "320px";
 
     var cover = api.img(A.murder, "photo");
-    cover.style.maxHeight = "44vh";
+    cover.style.maxHeight = "40vh";
     link.appendChild(cover);
     s.appendChild(link);
+
+    var play = document.createElement("a");
+    play.className = "linkbtn";
+    play.href = A.murderLink;
+    play.target = "_blank";
+    play.rel = "noopener";
+    play.textContent = "Go to intermission";
+    s.appendChild(play);
 
     s.appendChild(api.button("Continue","solid",function(){ api.next(); }));
   }
