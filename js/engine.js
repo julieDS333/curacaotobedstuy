@@ -61,8 +61,22 @@ var App = (function(){
     if(current && typeof current.unmount === "function"){
       try { current.unmount(); } catch(e){}
     }
+
     var g = window.GAMES[id];
-    if(!g){ console.warn("missing game:", id); return; }
+
+    if(!g){
+      console.warn("missing game:", id);
+      var box = $("#screen");
+      box.innerHTML = "";
+      box.appendChild(el("div","plate",
+        "<div class='no'>Not built yet</div><h1>" + id +
+        "</h1><p>This room is still under construction.</p>"));
+      var again = el("button","btn solid","Back to the start");
+      again.addEventListener("click", reset);
+      box.appendChild(again);
+      return;
+    }
+
     current = g;
     var s = $("#screen");
     s.innerHTML = "";
@@ -82,7 +96,12 @@ var App = (function(){
   }
 
   function next(){
-    idx = Math.min(idx + 1, GAME_ORDER.length - 1);
+    var n = Math.min(idx + 1, GAME_ORDER.length - 1);
+    if(!window.GAMES[GAME_ORDER[n]]){
+      render(GAME_ORDER[n]);
+      return;
+    }
+    idx = n;
     save();
     render(GAME_ORDER[idx]);
   }
@@ -118,13 +137,14 @@ var App = (function(){
     }, 9000);
   }
 
-  /* ---------- progress saving (survives a refresh) ---------- */
+  /* ---------- progress saving ---------- */
   function save(){ try{ localStorage.setItem("bedstuy", String(idx)); }catch(e){} }
 
   function load(){
     try{
       var v = parseInt(localStorage.getItem("bedstuy"), 10);
-      if(!isNaN(v) && v >= 0 && v < GAME_ORDER.length) idx = v;
+      if(!isNaN(v) && v >= 0 && v < GAME_ORDER.length && window.GAMES[GAME_ORDER[v]]) idx = v;
+      if(location.search.indexOf("reset") >= 0) idx = 0;
     }catch(e){}
   }
 
