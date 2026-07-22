@@ -4,9 +4,9 @@ window.GAMES.flags = {
   mount: function(root, api){
     var ROUNDS = [
       { name: "Curaçao",  shapes: A.curShapes, real: A.curacaoFlag,
-        line: "Where you are. Build it." },
+        line: "Where you are. Build it, piece by piece." },
       { name: "New York", shapes: A.nyShapes,  real: A.nyFlag,
-        line: "Where you are going. Build it faster." }
+        line: "Where you are going. Same deal, less patience from me." }
     ];
 
     var r = 0;
@@ -19,15 +19,16 @@ window.GAMES.flags = {
 
     function startRound(){
       var round = ROUNDS[r];
-      var placed = [];
+      var picked = [];
       s.innerHTML = "";
 
       s.appendChild(api.carlos(round.line));
 
-      var frame = api.el("div", "buildframe");
-      s.appendChild(frame);
+      var box = api.el("div", "stack");
+      box.appendChild(api.el("div", "empty", "empty"));
+      s.appendChild(box);
 
-      var count = api.el("div", "slots", "0 / " + round.shapes.length + " pieces");
+      var count = api.el("div", "slots", "0 / " + round.shapes.length);
       s.appendChild(count);
 
       var floor = api.el("div", "floor");
@@ -35,16 +36,14 @@ window.GAMES.flags = {
 
       var decoys = api.shuffle(A.decoyFlags).slice(0, 6);
       var pool = api.shuffle(
-        round.shapes.map(function(n, i){ return { name: n, ok: true, order: i }; })
-        .concat(decoys.map(function(n){ return { name: n, ok: false }; }))
+        round.shapes.map(function(n){ return { name: n, ok: true }; })
+          .concat(decoys.map(function(n){ return { name: n, ok: false }; }))
       );
 
       var tiles = [];
       pool.forEach(function(p){
         var t = api.el("div", "tile");
         t.appendChild(api.img(p.name, ""));
-        t.dataset.ok = p.ok ? "1" : "0";
-        t.dataset.order = (p.order === undefined) ? "" : p.order;
         t.addEventListener("click", function(){ pick(p, t); });
         floor.appendChild(t);
         tiles.push(t);
@@ -66,24 +65,22 @@ window.GAMES.flags = {
         });
       }
 
-      function redrawFrame(){
-        frame.innerHTML = "";
-        placed.slice().sort(function(a, b){ return a - b; }).forEach(function(i){
-          frame.appendChild(api.img(round.shapes[i], ""));
-        });
-        count.textContent = placed.length + " / " + round.shapes.length + " pieces";
-      }
-
       function pick(p, t){
-        if(!p.ok){
-          api.fail(scatter);
-          return;
-        }
-        if(placed.indexOf(p.order) >= 0) return;
-        placed.push(p.order);
+        if(!p.ok){ api.fail(scatter); return; }
+        if(picked.indexOf(p.name) >= 0) return;
+
+        picked.push(p.name);
         if(t.parentNode) t.parentNode.removeChild(t);
-        redrawFrame();
-        if(placed.length === round.shapes.length){ win(); }
+
+        var layer = api.img(p.name, "");
+        layer.className = "";
+        box.appendChild(layer);
+        var empty = box.querySelector(".empty");
+        if(empty) empty.remove();
+
+        count.textContent = picked.length + " / " + round.shapes.length;
+
+        if(picked.length === round.shapes.length){ win(); }
         else { scatter(); }
       }
 
@@ -91,7 +88,7 @@ window.GAMES.flags = {
         s.innerHTML = "";
         s.appendChild(api.carlos(
           r === 0 ? "Correct. The universe is mildly surprised."
-                  : "Both flags. You may proceed to the truck."
+                  : "Both flags standing. Get in the truck."
         ));
         var real = api.img(round.real, "photo");
         real.style.maxHeight = "34vh";
