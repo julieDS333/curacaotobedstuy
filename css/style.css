@@ -147,3 +147,15 @@ img.asset{max-width:100%;display:block}
 .room .junk.gone{opacity:0;transform:translateY(-24px) rotate(14deg)}
 .counter{font-family:var(--mono);font-size:11px;letter-spacing:.12em;
   text-transform:uppercase;color:var(--muted)}
+
+/* ---------- music break ---------- */
+.sleeve{position:relative;width:100%;max-width:320px;border:1px solid var(--line);
+  border-radius:8px;overflow:hidden;background:#fff}
+.sleeve img{width:100%;display:block}
+.spin{animation:spin 8s linear infinite}
+@keyframes spin{from{transform:rotate(0)}to{transform:rotate(360deg)}}
+.linkbtn{display:block;width:100%;max-width:420px;text-align:center;
+  text-decoration:none;border:1px solid var(--ink);background:var(--ink);
+  color:var(--paper);font-family:var(--sans);font-size:16px;
+  padding:14px 22px;border-radius:8px}
+.linkbtn:active{opacity:.85}
