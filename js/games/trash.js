@@ -16,10 +16,9 @@ window.GAMES.trash = {
           { label:"Because men made them", say:"Sure. Still the same." },
           { label:"Because of the drone shot", say:"The drone shot is not the point." },
           { label:"Because of the empty highway", say:"The highway is always empty. Why." },
-          { label:"There is no answer", say:"Correct. There is no answer. Nobody knows." }
+          { label:"There is no answer", say:"Correct. There is no answer." }
         ],
-        free:true,
-        ok:"The universe has no comment on car advertising." },
+        free:true },
 
       { type:"choice",
         q:"What is the secret thing Julie really wants to do with you?",
@@ -44,26 +43,21 @@ window.GAMES.trash = {
         ok:"July. Hurry up girl." }
     ];
 
-    /* 10 pieces scattered around the room */
     var SPOTS = [
-      { left:"5%",  top:"58%" }, { left:"22%", top:"70%" },
-      { left:"38%", top:"55%" }, { left:"54%", top:"72%" },
-      { left:"70%", top:"60%" }, { left:"84%", top:"48%" },
-      { left:"14%", top:"30%" }, { left:"46%", top:"26%" },
-      { left:"66%", top:"34%" }, { left:"30%", top:"44%" }
+      { left:"4%",  top:"62%" }, { left:"20%", top:"76%" },
+      { left:"36%", top:"58%" }, { left:"52%", top:"80%" },
+      { left:"68%", top:"64%" }, { left:"84%", top:"52%" },
+      { left:"12%", top:"34%" }, { left:"44%", top:"28%" },
+      { left:"72%", top:"36%" }, { left:"28%", top:"46%" }
     ];
 
     var i = 0;
     var perQ = Math.ceil(SPOTS.length / QUESTIONS.length);
 
-    root.appendChild(api.plate(4, "The Living Room",
-      "Bed Stuy, interior \u2014 refuse, questions, one woman"));
-
-    var s = api.stage();
-    root.appendChild(s);
-
-    var room = api.el("div","room");
-    room.appendChild(api.img(A.livingroom, "bg"));
+    /* full-bleed living room behind everything */
+    var room = api.el("div","roomfull");
+    room.style.backgroundImage = "url('" + api.url(A.livingroom) + "')";
+    root.appendChild(room);
 
     var junk = SPOTS.map(function(sp, n){
       var j = api.img(A.trash[n % A.trash.length], "junk");
@@ -73,17 +67,21 @@ window.GAMES.trash = {
       room.appendChild(j);
       return j;
     });
-    s.appendChild(room);
 
-    var count = api.el("div","counter", SPOTS.length + " pieces of trash");
+    var s = api.stage();
+    s.className = "stage overlay";
+    root.appendChild(s);
+
+    var count = api.el("div","chip", SPOTS.length + " pieces of trash");
     s.appendChild(count);
-
-    var line = api.el("div","note",
-      "Answer correctly and the room cleans itself. That is not how cleaning works.");
-    s.appendChild(line);
 
     var panel = api.el("div","choices");
     s.appendChild(panel);
+
+    var line = api.el("div","card", "");
+    line.style.fontStyle = "italic";
+    line.style.display = "none";
+    s.appendChild(line);
 
     ask();
 
@@ -100,10 +98,12 @@ window.GAMES.trash = {
     }
 
     function talk(text){
+      if(!text){ line.style.display = "none"; return; }
       line.textContent = text;
-      line.className = "note";
+      line.style.display = "block";
+      line.className = "card";
       void line.offsetWidth;
-      line.className = "note fade";
+      line.className = "card fade";
     }
 
     function advance(){
@@ -117,11 +117,12 @@ window.GAMES.trash = {
       var Q = QUESTIONS[i];
       panel.innerHTML = "";
 
-      panel.appendChild(api.el("div","q", Q.q));
+      panel.appendChild(api.el("div","card q", Q.q));
 
       if(Q.type === "text"){
         var input = api.el("input","field");
         input.type = "text";
+        input.style.background = "#fff";
         input.setAttribute("autocomplete","off");
         input.setAttribute("autocapitalize","off");
         panel.appendChild(input);
@@ -139,7 +140,7 @@ window.GAMES.trash = {
 
       } else {
         api.shuffle(Q.options).forEach(function(opt){
-          panel.appendChild(api.button(opt.label, null, function(){
+          panel.appendChild(api.button(opt.label, "white", function(){
             if(Q.free){ talk(opt.say); advance(); return; }
             if(opt.correct){ talk(Q.ok); advance(); }
             else { talk(opt.say); api.fail(); }
@@ -151,19 +152,16 @@ window.GAMES.trash = {
     function finish(){
       s.innerHTML = "";
 
-      var clean1 = api.img(A.livingroom, "photo");
-      clean1.style.maxHeight = "40vh";
-      s.appendChild(clean1);
-
-      s.appendChild(api.el("div","q","\u201Cit smells so good in here\u201D"));
+      s.appendChild(api.el("div","card q","\u201Cit smells so good in here\u201D"));
 
       var bag = api.img(A.itsMyTrash, "photo");
-      bag.style.maxHeight = "26vh";
+      bag.style.maxHeight = "30vh";
       bag.style.opacity = "0";
       bag.style.transition = "opacity .5s ease";
       s.appendChild(bag);
 
-      var line2 = api.el("div","q","");
+      var line2 = api.el("div","card q","");
+      line2.style.display = "none";
       s.appendChild(line2);
 
       var go = api.button("Continue","solid",function(){ api.next(); });
@@ -173,7 +171,8 @@ window.GAMES.trash = {
       setTimeout(function(){ bag.style.opacity = "1"; }, 900);
       setTimeout(function(){
         line2.textContent = "\u201Cyes \u2014 it's my trash\u201D";
-        line2.className = "q fade";
+        line2.style.display = "block";
+        line2.className = "card q fade";
       }, 1500);
       setTimeout(function(){ go.style.display = "block"; }, 2200);
     }
