@@ -62,7 +62,7 @@ window.GAMES.uhaul = (function(){
 
       function jump(){
         if(dead || won) return;
-        if(onGround){ vy = -9.6; onGround = false; }
+        if(onGround){ vy = -7.8; onGround = false; }
       }
 
       btn.addEventListener("click", function(e){ e.stopPropagation(); jump(); });
@@ -101,7 +101,7 @@ window.GAMES.uhaul = (function(){
         if(!dead && !won){
           speed = 3.2 + (DURATION - left) * 0.075;
 
-          vy += 0.46; y += vy;
+          vy += 0.22; y += vy;
           if(y > 0){ y = 0; vy = 0; onGround = true; }
 
           if(--spawnIn <= 0) spawn();
