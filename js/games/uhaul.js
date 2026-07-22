@@ -78,7 +78,8 @@ window.GAMES.uhaul = (function(){
       }, 1000);
 
       function spawn(){
-        var gift = Math.random() < 0.45;
+        var done = (DURATION - left) / DURATION;
+        var gift = Math.random() < (0.45 + done * 0.4);;
         if(gift){
           items.push({ kind:"gift", img: gifts[Math.floor(Math.random()*gifts.length)],
                        x: W + 20, w: GW, h: GW, y: GROUND - GW - (Math.random()<0.3 ? 46 : 4) });
@@ -86,7 +87,7 @@ window.GAMES.uhaul = (function(){
           items.push({ kind:"car", img: carImgs[Math.floor(Math.random()*carImgs.length)],
                        x: W + 20, w: CW, h: CH, y: GROUND - CH });
         }
-        spawnIn = Math.max(34, 78 - speed * 4) + Math.random() * 40;
+        spawnIn = 62 + done * 70 + Math.random() * 40;
       }
 
       function hit(a, b){
