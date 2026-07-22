@@ -1,7 +1,103 @@
-your-repo/
-├── index.html
-├── css/style.css
-├── js/config.js
-├── js/engine.js
-├── js/games/
-└── js/config.js
+:root{
+  --paper:#F6F4EF; --ink:#16130F; --muted:#8A857C; --line:#DCD6CA;
+  --accent:#1B5CFF; --danger:#C8352B;
+  --serif:"Instrument Serif",Georgia,"Times New Roman",serif;
+  --sans:"Geist",-apple-system,BlinkMacSystemFont,"Helvetica Neue",sans-serif;
+  --mono:"Geist Mono",ui-monospace,Menlo,monospace;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;height:100%;overscroll-behavior:none}
+body{
+  background:var(--paper);color:var(--ink);font-family:var(--sans);
+  font-size:17px;line-height:1.5;-webkit-font-smoothing:antialiased;
+  user-select:none;-webkit-user-select:none;
+}
+#app{min-height:100%;display:flex;flex-direction:column;
+  padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom)}
+
+/* ---------- the serious frame ---------- */
+#frame-top{padding:14px 22px 10px}
+#journey{height:2px;background:var(--line);position:relative}
+#journey-fill{height:2px;width:0;background:var(--accent);transition:width .5s ease}
+#journey-labels{display:flex;justify-content:space-between;margin-top:8px;
+  font-family:var(--mono);font-size:10px;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--muted)}
+#journey-step{color:var(--ink)}
+
+#screen{flex:1;display:flex;flex-direction:column;padding:0 22px 26px;position:relative}
+
+/* ---------- museum wall label ---------- */
+.plate{margin:18px 0 20px;border-top:1px solid var(--line);padding-top:14px}
+.plate .no{font-family:var(--mono);font-size:10px;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--muted)}
+.plate h1{font-family:var(--serif);font-weight:400;font-size:30px;
+  line-height:1.1;margin:6px 0}
+.plate p{font-size:14px;color:var(--muted);margin:0;font-style:italic}
+
+.stage{flex:1;display:flex;flex-direction:column;justify-content:center;
+  align-items:center;gap:16px;position:relative;min-height:340px;text-align:center}
+
+/* ---------- controls ---------- */
+.btn{appearance:none;-webkit-appearance:none;border:1px solid var(--ink);
+  background:transparent;color:var(--ink);font-family:var(--sans);font-size:16px;
+  padding:14px 22px;border-radius:8px;width:100%;max-width:420px;cursor:pointer;
+  transition:transform .08s ease,background .15s ease,border-color .15s ease}
+.btn:active{transform:scale(.98);background:rgba(0,0,0,.05)}
+.btn.solid{background:var(--ink);color:var(--paper)}
+.btn.good{border-color:var(--accent);color:var(--accent)}
+.btn.bad{border-color:var(--danger);color:var(--danger)}
+.btn:disabled{opacity:.45}
+.choices{display:flex;flex-direction:column;gap:10px;width:100%;align-items:center}
+
+.field{width:100%;max-width:420px;border:1px solid var(--ink);border-radius:8px;
+  padding:14px;font-family:var(--mono);font-size:18px;background:transparent;
+  text-align:center;color:var(--ink)}
+.field:focus{outline:none;border-color:var(--accent)}
+
+.q{font-family:var(--serif);font-size:24px;line-height:1.25;margin:0 0 4px;max-width:460px}
+.hint{font-family:var(--mono);font-size:11px;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--muted)}
+.note{font-size:15px;color:var(--muted);max-width:440px;font-style:italic}
+
+/* ---------- carlos ---------- */
+.carlos{display:flex;gap:12px;align-items:flex-start;width:100%;max-width:460px;text-align:left}
+.carlos img{width:56px;height:56px;border-radius:50%;object-fit:cover;
+  border:1px solid var(--line);flex:none;background:#fff}
+.carlos .say{font-family:var(--serif);font-size:20px;line-height:1.3}
+
+/* ---------- hud ---------- */
+.hud{display:flex;justify-content:space-between;align-items:center;
+  width:100%;max-width:460px;font-family:var(--mono);font-size:12px;
+  letter-spacing:.1em;color:var(--muted)}
+.hud .lives{letter-spacing:0;font-size:15px}
+
+canvas{width:100%;max-width:460px;display:block;border:1px solid var(--line);
+  border-radius:8px;touch-action:none;background:#fff}
+
+img.asset{max-width:100%;display:block}
+.photo{max-width:100%;max-height:46vh;border-radius:8px;object-fit:cover;
+  border:1px solid var(--line)}
+
+/* ---------- chaos: background intruders ---------- */
+#cameo{position:fixed;inset:0;pointer-events:none;z-index:40;overflow:hidden}
+#cameo img{position:absolute;width:74px}
+@keyframes flyby{
+  from{transform:translate(-30vw,0) rotate(-6deg)}
+  to{transform:translate(130vw,-40px) rotate(8deg)}
+}
+
+/* ---------- pistola fail state ---------- */
+#pistola{position:fixed;inset:0;z-index:60;display:none;
+  align-items:center;justify-content:center;flex-direction:column;gap:12px;
+  background:rgba(200,53,43,.94);color:#fff}
+#pistola.on{display:flex}
+#pistola img{width:130px}
+#pistola span{font-family:var(--serif);font-size:52px;letter-spacing:.02em}
+
+.shake{animation:shake .4s}
+@keyframes shake{
+  0%,100%{transform:translateX(0)}20%{transform:translateX(-9px)}
+  40%{transform:translateX(8px)}60%{transform:translateX(-6px)}80%{transform:translateX(4px)}
+}
+.fade{animation:fade .35s ease}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
