@@ -281,3 +281,8 @@ img.asset{max-width:100%;display:block}
 .sign{font-family:var(--serif);font-size:22px}
 .july{font-family:var(--mono);font-size:11px;letter-spacing:.16em;
   text-transform:uppercase;color:var(--muted);text-align:center}
+
+img{-webkit-touch-callout:none;-webkit-user-select:none;user-select:none;
+  pointer-events:none}
+.swatch img,.tile img{pointer-events:none}
+.sky,.court,.couch,.room,.floor{-webkit-touch-callout:none;touch-action:none}
