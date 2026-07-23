@@ -15,6 +15,12 @@ window.GAMES.tennis = (function(){
 
       var NEED = 20;
 
+      /* ---- ONE KNOB: 1 easy, 3 medium, 5 brutal ---- */
+      var DIFF = 4;
+      var RADIUS   = [0,60,54,44,36,30][DIFF];
+      var TOPSPEED = [0,4.2,5.4,6.8,8.0,9.2][DIFF];
+      var RAMP     = [0,0.14,0.16,0.22,0.28,0.34][DIFF];
+
       root.appendChild(api.plate(9, "Erratic Tennis"));
 
       var s = api.stage();
@@ -55,7 +61,7 @@ window.GAMES.tennis = (function(){
         measure();
         x = W * 0.5;
         y = H * 0.5;
-        var sp = Math.min(2.6 + hits * 0.16, 5.4);
+        var sp = Math.min(2.8 + hits * RAMP, TOPSPEED);
         var a = Math.random() * Math.PI * 2;
         vx = Math.cos(a) * sp;
         vy = Math.sin(a) * sp;
@@ -76,7 +82,7 @@ window.GAMES.tennis = (function(){
         vy = Math.sin(a) * sp * boost;
         jerkIn = panic
           ? 20 + Math.random() * 16
-          : Math.max(18, 46 - hits * 1.5) + Math.random() * 22;
+          : Math.max(14, 44 - hits * 1.5 - DIFF * 3) + Math.random() * 20;
       }
 
       function talk(t){
@@ -98,7 +104,7 @@ window.GAMES.tennis = (function(){
         ring.classList.add("on");
 
         var d = Math.hypot(px - x, py - y);
-        if(d < 52){
+        if(d < RADIUS){
           hits++;
           score.textContent = hits + " / " + NEED;
           if(hits >= NEED) return win();
