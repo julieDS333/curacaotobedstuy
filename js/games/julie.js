@@ -16,7 +16,7 @@ window.GAMES.julie = (function(){
     mount: function(root, api){
       clearAll();
 
-      var LIMIT = 5000;
+      var LIMIT = 7000;
       var ROUNDS = [
         { kiss:5,  choc:10 },
         { kiss:10, choc:11 },
@@ -69,7 +69,17 @@ window.GAMES.julie = (function(){
       var goBtn = api.button("Start","solid", startRound);
       s.appendChild(goBtn);
 
+      function armDrowse(){
+        later(function(){
+          if(!live && goBtn.style.display !== "none"){
+            talk("She's going...");
+            later(function(){ if(!live) startRound(); }, 1200);
+          }
+        }, 10000);
+      }
+
       draw();
+      armDrowse();
 
       function talk(t){
         line.textContent = t;
@@ -109,7 +119,7 @@ window.GAMES.julie = (function(){
         talk("She is out. Send everything.");
 
         var end = Date.now() + LIMIT;
-        clock.textContent = "5.0";
+        clock.textContent = (LIMIT / 1000).toFixed(1);
         tick = setInterval(function(){
           var leftMs = end - Date.now();
           if(leftMs <= 0){
@@ -142,6 +152,7 @@ window.GAMES.julie = (function(){
         draw();
         goBtn.textContent = "Next round";
         goBtn.style.display = "block";
+        armDrowse();
       }
 
       function fail(){
@@ -155,6 +166,7 @@ window.GAMES.julie = (function(){
           clock.textContent = "\u2014";
           goBtn.textContent = "Try again";
           goBtn.style.display = "block";
+          armDrowse();
         });
       }
 
