@@ -13,7 +13,7 @@ window.GAMES.tennis = (function(){
     mount: function(root, api){
       stop();
 
-      var NEED = 10;
+      var NEED = 20;
 
       root.appendChild(api.plate(9, "Erratic Tennis"));
 
@@ -55,7 +55,7 @@ window.GAMES.tennis = (function(){
         measure();
         x = W * 0.5;
         y = H * 0.5;
-        var sp = 3.2 + hits * 0.45;
+        var sp = 3.0 + hits * 0.26;
         var a = Math.random() * Math.PI * 2;
         vx = Math.cos(a) * sp;
         vy = Math.sin(a) * sp;
@@ -63,13 +63,20 @@ window.GAMES.tennis = (function(){
       }
 
       function jerk(){
+        var panic = hits >= NEED - 2;
         var sp = Math.sqrt(vx*vx + vy*vy);
-        var turn = (Math.random() * 1.0 - 0.5) + (Math.random() < 0.12 ? Math.PI : 0);
+        var turn = panic
+          ? (Math.random() * 2.6 - 1.3) + (Math.random() < 0.4 ? Math.PI : 0)
+          : (Math.random() * 1.0 - 0.5) + (Math.random() < 0.12 ? Math.PI : 0);
         var a = Math.atan2(vy, vx) + turn;
-        var boost = 0.94 + Math.random() * 0.14;
+        var boost = panic
+          ? 0.7 + Math.random() * 0.75
+          : 0.94 + Math.random() * 0.14;
         vx = Math.cos(a) * sp * boost;
         vy = Math.sin(a) * sp * boost;
-        jerkIn = Math.max(18, 44 - hits * 2.6) + Math.random() * 22;
+        jerkIn = panic
+          ? 9 + Math.random() * 12
+          : Math.max(18, 46 - hits * 1.5) + Math.random() * 22;
       }
 
       function talk(t){
@@ -95,13 +102,17 @@ window.GAMES.tennis = (function(){
           hits++;
           score.textContent = hits + " / " + NEED;
           if(hits >= NEED) return win();
-          talk(hits === 5 ? "Halfway. It is getting worse." : "Returned.");
+          talk(hits === 10 ? "Halfway. It is getting worse." :
+               hits === NEED - 2 ? "Two left. Good luck." : "Returned.");
           launch();
         } else {
           misses++;
           missBox.textContent = misses + (misses === 1 ? " miss" : " misses");
+          var lost = hits > 0;
+          if(lost) hits--;
+          score.textContent = hits + " / " + NEED;
           api.fail(function(){
-            talk("You swung at nothing.");
+            talk(lost ? "Minus one. Watch the ball." : "You swung at nothing.");
           });
         }
       });
@@ -130,8 +141,8 @@ window.GAMES.tennis = (function(){
         window.removeEventListener("resize", measure);
         s.innerHTML = "";
         s.appendChild(api.carlos(
-          misses === 0 ? "Ten for ten, no misses. Julie is going to hear about this."
-                       : "Ten returns. " + misses + " swings at open air. Still a win."));
+          misses === 0 ? "Twenty for twenty, no misses. Julie is going to hear about this."
+                       : "Twenty returns. " + misses + " swings at open air. Still a win."));
         s.appendChild(api.button("Continue","solid",function(){ api.next(); }));
       }
 
