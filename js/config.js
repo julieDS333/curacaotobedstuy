@@ -5,6 +5,7 @@ var A = {
   carlos:      "carlos.png",
   curacao:     "curacao.jpeg",
   bedstuy:     "bedstuy.jpeg",
+  julieLaura:  "julielaura.png",
   pistola:     "pistola1.jpeg",
   dove:        "dove.png",
   doveEggs:    "dove eggs.png",
