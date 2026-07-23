@@ -55,7 +55,7 @@ window.GAMES.tennis = (function(){
         measure();
         x = W * 0.5;
         y = H * 0.5;
-        var sp = 2.1 + hits * 0.22;
+        var sp = 2.7 + hits * 0.32;
         var a = Math.random() * Math.PI * 2;
         vx = Math.cos(a) * sp;
         vy = Math.sin(a) * sp;
@@ -69,7 +69,7 @@ window.GAMES.tennis = (function(){
         var boost = 0.94 + Math.random() * 0.14;
         vx = Math.cos(a) * sp * boost;
         vy = Math.sin(a) * sp * boost;
-        jerkIn = Math.max(38, 70 - hits * 3) + Math.random() * 30;
+        jerkIn = Math.max(26, 52 - hits * 2.5) + Math.random() * 28;
       }
 
       function talk(t){
