@@ -206,3 +206,9 @@ img.asset{max-width:100%;display:block}
 .swatch:active{transform:scale(.97)}
 .swatch.dim{opacity:.35}
 .beershot{max-height:34vh;border-radius:8px;border:1px solid var(--line)}
+
+/* ---------- type detective ---------- */
+.specimen{font-size:44px;line-height:1.15;text-align:center;color:var(--ink);
+  padding:26px 10px;border:1px solid var(--line);border-radius:8px;background:#fff;
+  width:100%;max-width:460px;word-break:break-word}
+.specimen.small{font-size:34px}
