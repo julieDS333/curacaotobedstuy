@@ -57,6 +57,7 @@ window.GAMES.julie = (function(){
       s.appendChild(tally);
 
       var senders = api.el("div","senders");
+      senders.addEventListener("dblclick", function(e){ e.preventDefault(); });
       var bk = api.button("\uD83D\uDC8B  Send kisses", null, function(){ send("kiss"); });
       var bc = api.button("\uD83C\uDF6B  Send food", null, function(){ send("choc"); });
       senders.appendChild(bk);
@@ -95,11 +96,22 @@ window.GAMES.julie = (function(){
       }
 
       function fly(emoji){
+        var cr = couch.getBoundingClientRect();
+        var hr = her.getBoundingClientRect();
+
+        var startX = cr.width * (0.18 + Math.random() * 0.64);
+        var startY = cr.height - 10;
+
+        var targetX = (hr.left - cr.left) + hr.width * (0.35 + Math.random() * 0.3);
+        var targetY = (hr.top  - cr.top)  + hr.height * (0.2 + Math.random() * 0.3);
+
         var f = api.el("div","flyer", emoji);
-        f.style.left = (30 + Math.random() * 40) + "%";
-        f.style.bottom = "18%";
+        f.style.left = startX + "px";
+        f.style.top  = startY + "px";
+        f.style.setProperty("--dx", (targetX - startX) + "px");
+        f.style.setProperty("--dy", (targetY - startY) + "px");
         couch.appendChild(f);
-        setTimeout(function(){ if(f.parentNode) f.parentNode.removeChild(f); }, 1200);
+        setTimeout(function(){ if(f.parentNode) f.parentNode.removeChild(f); }, 1000);
       }
 
       function send(kind){
