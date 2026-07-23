@@ -32,8 +32,8 @@ window.GAMES.type = {
 
     var i = 0;
 
-    root.appendChild(api.plate(8, "Attribution",
-      "Five specimens \u2014 name the face"));
+    root.appendChild(api.plate(8, "Typographer",
+      "Don't get distracted by the steak tartar"));
 
     var s = api.stage();
     root.appendChild(s);
