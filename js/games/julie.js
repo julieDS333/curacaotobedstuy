@@ -1,16 +1,13 @@
 window.GAMES.julie = (function(){
-  var timers = [];
+  var timers = [], tick = null;
 
   function clearAll(){
     timers.forEach(clearTimeout);
     timers = [];
+    if(tick) clearInterval(tick);
+    tick = null;
   }
-
-  function later(fn, ms){
-    var id = setTimeout(fn, ms);
-    timers.push(id);
-    return id;
-  }
+  function later(fn, ms){ var id = setTimeout(fn, ms); timers.push(id); return id; }
 
   return {
     short: "Sofa",
@@ -19,20 +16,25 @@ window.GAMES.julie = (function(){
     mount: function(root, api){
       clearAll();
 
-      var NEED = 5;
-      var WINDOWS = [1600, 1350, 1150, 950, 800];
+      var LIMIT = 5000;
+      var ROUNDS = [
+        { kiss:5,  choc:10 },
+        { kiss:10, choc:11 },
+        { kiss:16, choc:12 },
+        { kiss:20, choc:13 },
+        { kiss:25, choc:14 }
+      ];
 
-      var got = 0, asleep = false, armed = false;
+      var r = 0, kiss = 0, choc = 0, live = false;
 
-      root.appendChild(api.plate(6, "Keep Julie Awake",
-        "Brooklyn, evening \u2014 one sofa, one series, one problem"));
+      root.appendChild(api.plate(6, "Keep Julie Awake"));
 
       var s = api.stage();
       root.appendChild(s);
 
       var pips = api.el("div","pips");
       var dots = [];
-      for(var k = 0; k < NEED; k++){
+      for(var k = 0; k < ROUNDS.length; k++){
         var d = api.el("div","pip");
         pips.appendChild(d);
         dots.push(d);
@@ -40,31 +42,34 @@ window.GAMES.julie = (function(){
       s.appendChild(pips);
 
       var couch = api.el("div","couch");
-
       var tv = api.el("div","tv");
       tv.style.backgroundImage = "url('" + api.url(A.hotd[0]) + "')";
       couch.appendChild(tv);
-
-      var sofa = api.img(A.sofa, "sofa");
-      couch.appendChild(sofa);
-
+      couch.appendChild(api.img(A.sofa, "sofa"));
       var her = api.img(A.julieAwake, "her");
       couch.appendChild(her);
-
-      var zzz = api.el("div","zzz","z z z");
-      couch.appendChild(zzz);
-
       s.appendChild(couch);
+
+      var clock = api.el("div","clock","\u2014");
+      s.appendChild(clock);
+
+      var tally = api.el("div","tally","");
+      s.appendChild(tally);
+
+      var senders = api.el("div","senders");
+      var bk = api.button("\uD83D\uDC8B  Send kisses", null, function(){ send("kiss"); });
+      var bc = api.button("\uD83C\uDF6B  Send food", null, function(){ send("choc"); });
+      senders.appendChild(bk);
+      senders.appendChild(bc);
+      s.appendChild(senders);
 
       var line = api.el("div","note","She is watching. For now.");
       s.appendChild(line);
 
-      her.addEventListener("click", tickle);
-      couch.addEventListener("click", function(e){
-        if(e.target !== her) miss();
-      });
+      var goBtn = api.button("Start","solid", startRound);
+      s.appendChild(goBtn);
 
-      schedule();
+      draw();
 
       function talk(t){
         line.textContent = t;
@@ -73,67 +78,97 @@ window.GAMES.julie = (function(){
         line.className = "note fade";
       }
 
-      function schedule(){
-        var wait = 1200 + Math.random() * 2600;
-        later(sleep, wait);
+      function draw(){
+        var R = ROUNDS[r];
+        tally.innerHTML = "\uD83D\uDC8B <b>" + kiss + "</b> / " + R.kiss +
+                          " &nbsp;&nbsp; \uD83C\uDF6B <b>" + choc + "</b> / " + R.choc;
       }
 
-      function sleep(){
-        asleep = true;
-        armed = true;
+      function fly(emoji){
+        var f = api.el("div","flyer", emoji);
+        f.style.left = (30 + Math.random() * 40) + "%";
+        f.style.bottom = "18%";
+        couch.appendChild(f);
+        setTimeout(function(){ if(f.parentNode) f.parentNode.removeChild(f); }, 1200);
+      }
+
+      function send(kind){
+        if(!live) return;
+        if(kind === "kiss"){ kiss++; fly("\uD83D\uDC8B"); }
+        else { choc++; fly("\uD83C\uDF6B"); }
+        draw();
+        var R = ROUNDS[r];
+        if(kiss >= R.kiss && choc >= R.choc) done();
+      }
+
+      function startRound(){
+        kiss = 0; choc = 0; live = true;
+        goBtn.style.display = "none";
         her.src = api.url(A.julieSleeps);
-        zzz.classList.add("on");
-        talk("Tickle her.");
-        later(function(){
-          if(asleep && armed) miss();
-        }, WINDOWS[got]);
+        draw();
+        talk("She is out. Send everything.");
+
+        var end = Date.now() + LIMIT;
+        clock.textContent = "5.0";
+        tick = setInterval(function(){
+          var leftMs = end - Date.now();
+          if(leftMs <= 0){
+            clearInterval(tick); tick = null;
+            clock.textContent = "0.0";
+            if(live) fail();
+          } else {
+            clock.textContent = (leftMs / 1000).toFixed(1);
+          }
+        }, 80);
       }
 
-      function wake(){
-        asleep = false;
-        armed = false;
+      function stopClock(){
+        if(tick){ clearInterval(tick); tick = null; }
+      }
+
+      function done(){
+        live = false;
+        stopClock();
         her.src = api.url(A.julieAwake);
-        zzz.classList.remove("on");
+        r++;
+        dots[r - 1].classList.add("on");
+
+        if(r >= ROUNDS.length){ return win(); }
+
+        tv.style.backgroundImage = "url('" + api.url(A.hotd[r]) + "')";
+        talk("Awake. For about four seconds.");
+        clock.textContent = "\u2014";
+        kiss = 0; choc = 0;
+        draw();
+        goBtn.textContent = "Next round";
+        goBtn.style.display = "block";
       }
 
-      function tickle(e){
-        e.stopPropagation();
-        if(!asleep){
-          talk("She is already awake. Leave her alone.");
-          return;
-        }
-        armed = false;
-        wake();
-        got++;
-        dots[got - 1].classList.add("on");
-
-        if(got >= NEED){ return win(); }
-
-        tv.style.backgroundImage = "url('" + api.url(A.hotd[got]) + "')";
-        talk("Saved. Episode continues.");
-        schedule();
-      }
-
-      function miss(){
-        if(!asleep) return;
-        armed = false;
-        wake();
+      function fail(){
+        live = false;
+        stopClock();
         api.fail(function(){
-          talk("Gone. She missed the whole scene. Again.");
-          schedule();
+          her.src = api.url(A.julieAwake);
+          talk("She slept through it. Start again.");
+          kiss = 0; choc = 0;
+          draw();
+          clock.textContent = "\u2014";
+          goBtn.textContent = "Try again";
+          goBtn.style.display = "block";
         });
       }
 
       function win(){
+        live = false;
+        stopClock();
         clearAll();
-        zzz.classList.remove("on");
         tv.style.backgroundImage = "url('" + api.url(A.hotd[4]) + "')";
-        tv.style.opacity = ".85";
+        clock.textContent = "\u2014";
+        senders.style.display = "none";
         talk("Credits. She stayed awake. Barely.");
-        her.removeEventListener("click", tickle);
         later(function(){
           s.appendChild(api.button("Continue","solid",function(){ api.next(); }));
-        }, 1200);
+        }, 1000);
       }
     }
   };
