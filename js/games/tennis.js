@@ -55,21 +55,21 @@ window.GAMES.tennis = (function(){
         measure();
         x = W * 0.5;
         y = H * 0.5;
-        var sp = 2.7 + hits * 0.32;
+        var sp = 3.2 + hits * 0.45;
         var a = Math.random() * Math.PI * 2;
         vx = Math.cos(a) * sp;
         vy = Math.sin(a) * sp;
         jerkIn = 26 + Math.random() * 30;
       }
 
-     function jerk(){
+      function jerk(){
         var sp = Math.sqrt(vx*vx + vy*vy);
         var turn = (Math.random() * 1.0 - 0.5) + (Math.random() < 0.12 ? Math.PI : 0);
         var a = Math.atan2(vy, vx) + turn;
         var boost = 0.94 + Math.random() * 0.14;
         vx = Math.cos(a) * sp * boost;
         vy = Math.sin(a) * sp * boost;
-        jerkIn = Math.max(26, 52 - hits * 2.5) + Math.random() * 28;
+        jerkIn = Math.max(18, 44 - hits * 2.6) + Math.random() * 22;
       }
 
       function talk(t){
@@ -91,7 +91,7 @@ window.GAMES.tennis = (function(){
         ring.classList.add("on");
 
         var d = Math.hypot(px - x, py - y);
-        if(d < 46){
+        if(d < 32){
           hits++;
           score.textContent = hits + " / " + NEED;
           if(hits >= NEED) return win();
