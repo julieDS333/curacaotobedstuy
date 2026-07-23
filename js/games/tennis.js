@@ -55,21 +55,21 @@ window.GAMES.tennis = (function(){
         measure();
         x = W * 0.5;
         y = H * 0.5;
-        var sp = 3.4 + hits * 0.42;
+        var sp = 2.1 + hits * 0.22;
         var a = Math.random() * Math.PI * 2;
         vx = Math.cos(a) * sp;
         vy = Math.sin(a) * sp;
         jerkIn = 26 + Math.random() * 30;
       }
 
-      function jerk(){
+     function jerk(){
         var sp = Math.sqrt(vx*vx + vy*vy);
-        var turn = (Math.random() * 1.8 - 0.9) + (Math.random() < 0.3 ? Math.PI : 0);
+        var turn = (Math.random() * 1.0 - 0.5) + (Math.random() < 0.12 ? Math.PI : 0);
         var a = Math.atan2(vy, vx) + turn;
-        var boost = 0.85 + Math.random() * 0.6;
+        var boost = 0.94 + Math.random() * 0.14;
         vx = Math.cos(a) * sp * boost;
         vy = Math.sin(a) * sp * boost;
-        jerkIn = Math.max(14, 34 - hits * 2) + Math.random() * 26;
+        jerkIn = Math.max(38, 70 - hits * 3) + Math.random() * 30;
       }
 
       function talk(t){
