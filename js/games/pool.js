@@ -54,7 +54,7 @@ window.GAMES.pool = {
         ok:"Correct. Obviously." }
     ];
 
-    root.appendChild(api.plate(10, "Kosciuszko"));
+    root.appendChild(api.plate(10, "Bedstuy Country Club"));
 
     var s = api.stage();
     root.appendChild(s);
