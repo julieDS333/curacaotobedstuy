@@ -218,3 +218,4 @@ var App = (function(){
 })();
 
 window.GAMES = window.GAMES || {};
+document.addEventListener("contextmenu", function(e){ e.preventDefault(); }, false);
