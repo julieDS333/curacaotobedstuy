@@ -19,9 +19,14 @@ window.GAMES.home = (function(){
       var s = api.stage();
       root.appendChild(s);
 
-      var shot = api.el("div","arrival");
-      shot.style.backgroundImage = "url('" + api.url(A.bedstuy) + "')";
+      var shot = api.img(A.julieLaura, "photo");
+      shot.style.maxHeight = "42vh";
       s.appendChild(shot);
+
+      var caption = api.el("div","welcome","come back amor");
+      caption.style.opacity = "0";
+      caption.style.transition = "opacity .8s ease";
+      s.appendChild(caption);
 
       var title = api.el("div","welcome","Welcome back to Bed Stuy");
       title.style.opacity = "0";
@@ -59,7 +64,8 @@ window.GAMES.home = (function(){
       again.style.transition = "opacity .8s ease";
       s.appendChild(again);
 
-      later(function(){ title.style.opacity = "1"; }, 600);
+      later(function(){ caption.style.opacity = "1"; }, 400);
+      later(function(){ title.style.opacity = "1"; }, 1000);
       later(function(){ beer.style.opacity = "1"; beerCap.style.opacity = "1"; }, 1600);
       later(function(){ letter.style.opacity = "1"; }, 2600);
       later(function(){ july.style.opacity = "1"; }, 4200);
