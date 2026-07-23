@@ -4,7 +4,7 @@ window.GAMES.beer = {
   mount: function(root, api){
 
     /* order: warm to fully frozen. indexes into A.beers */
-    var ORDER = [2, 3, 0, 1];
+    var ORDER = [0, 1, 2, 3];
 
     /* quips per wrong swatch, keyed by filename */
     var QUIPS = {
