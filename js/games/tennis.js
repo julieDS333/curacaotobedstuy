@@ -55,7 +55,7 @@ window.GAMES.tennis = (function(){
         measure();
         x = W * 0.5;
         y = H * 0.5;
-        var sp = 3.0 + hits * 0.26;
+        var sp = Math.min(2.6 + hits * 0.16, 5.4);
         var a = Math.random() * Math.PI * 2;
         vx = Math.cos(a) * sp;
         vy = Math.sin(a) * sp;
@@ -66,16 +66,16 @@ window.GAMES.tennis = (function(){
         var panic = hits >= NEED - 2;
         var sp = Math.sqrt(vx*vx + vy*vy);
         var turn = panic
-          ? (Math.random() * 2.6 - 1.3) + (Math.random() < 0.4 ? Math.PI : 0)
+          ? (Math.random() * 1.6 - 0.8) + (Math.random() < 0.22 ? Math.PI : 0)
           : (Math.random() * 1.0 - 0.5) + (Math.random() < 0.12 ? Math.PI : 0);
         var a = Math.atan2(vy, vx) + turn;
         var boost = panic
-          ? 0.7 + Math.random() * 0.75
+          ? 0.8 + Math.random() * 0.5
           : 0.94 + Math.random() * 0.14;
         vx = Math.cos(a) * sp * boost;
         vy = Math.sin(a) * sp * boost;
         jerkIn = panic
-          ? 9 + Math.random() * 12
+          ? 20 + Math.random() * 16
           : Math.max(18, 46 - hits * 1.5) + Math.random() * 22;
       }
 
@@ -98,7 +98,7 @@ window.GAMES.tennis = (function(){
         ring.classList.add("on");
 
         var d = Math.hypot(px - x, py - y);
-        if(d < 32){
+        if(d < 52){
           hits++;
           score.textContent = hits + " / " + NEED;
           if(hits >= NEED) return win();
@@ -108,7 +108,7 @@ window.GAMES.tennis = (function(){
         } else {
           misses++;
           missBox.textContent = misses + (misses === 1 ? " miss" : " misses");
-          var lost = hits > 0;
+          var lost = hits > 0 && misses % 2 === 0;
           if(lost) hits--;
           score.textContent = hits + " / " + NEED;
           api.fail(function(){
