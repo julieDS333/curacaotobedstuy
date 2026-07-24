@@ -18,8 +18,7 @@ window.GAMES.uhaul = (function(){
       var W = 460, H = 260, GROUND = 205;
       var DURATION = 60;
 
-      root.appendChild(api.plate(3, "The Drive",
-        "Curaçao to Bed Stuy — one truck, borrowed"));
+      root.appendChild(api.plate(3, "I'm not Uhauling, you're Uhauling."));
 
       var s = api.stage();
       root.appendChild(s);
