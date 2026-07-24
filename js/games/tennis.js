@@ -14,12 +14,11 @@ window.GAMES.tennis = (function(){
       stop();
 
       var NEED = 20;
-
-      /* ---- ONE KNOB: 1 easy, 3 medium, 5 brutal ---- */
-      var DIFF = 4;
-      var RADIUS   = [0,60,54,44,36,30][DIFF];
-      var TOPSPEED = [0,4.2,5.4,6.8,8.0,9.2][DIFF];
-      var RAMP     = [0,0.14,0.16,0.22,0.28,0.34][DIFF];
+      var RESET_AFTER = 5;      // misses in a row before the ball calms down
+      var RADIUS = 40;
+      var BASE = 2.8;
+      var RAMP = 0.42;          // aggressive: gets hard fast
+      var CAP  = 9.0;
 
       root.appendChild(api.plate(9, "Erratic Tennis"));
 
@@ -48,7 +47,8 @@ window.GAMES.tennis = (function(){
 
       var W = 0, H = 0;
       var x = 0, y = 0, vx = 0, vy = 0;
-      var hits = 0, misses = 0, alive = true, jerkIn = 0;
+      var hits = 0, misses = 0, streak = 0, level = 0;
+      var alive = true, jerkIn = 0;
 
       function measure(){
         var r = court.getBoundingClientRect();
@@ -57,32 +57,33 @@ window.GAMES.tennis = (function(){
       measure();
       window.addEventListener("resize", measure);
 
+      function speed(){
+        return Math.min(BASE + level * RAMP, CAP);
+      }
+
       function launch(){
         measure();
         x = W * 0.5;
         y = H * 0.5;
-        var sp = Math.min(2.8 + hits * RAMP, TOPSPEED);
+        var sp = speed();
         var a = Math.random() * Math.PI * 2;
         vx = Math.cos(a) * sp;
         vy = Math.sin(a) * sp;
-        jerkIn = 26 + Math.random() * 30;
+        jerkIn = 24 + Math.random() * 26;
       }
 
       function jerk(){
-        var panic = hits >= NEED - 2;
+        var hot = level >= 8;
         var sp = Math.sqrt(vx*vx + vy*vy);
-        var turn = panic
-          ? (Math.random() * 1.6 - 0.8) + (Math.random() < 0.22 ? Math.PI : 0)
+        var turn = hot
+          ? (Math.random() * 1.6 - 0.8) + (Math.random() < 0.25 ? Math.PI : 0)
           : (Math.random() * 1.0 - 0.5) + (Math.random() < 0.12 ? Math.PI : 0);
         var a = Math.atan2(vy, vx) + turn;
-        var boost = panic
-          ? 0.8 + Math.random() * 0.5
-          : 0.94 + Math.random() * 0.14;
+        var boost = hot ? 0.82 + Math.random() * 0.45
+                        : 0.94 + Math.random() * 0.14;
         vx = Math.cos(a) * sp * boost;
         vy = Math.sin(a) * sp * boost;
-        jerkIn = panic
-          ? 20 + Math.random() * 16
-          : Math.max(14, 44 - hits * 1.5 - DIFF * 3) + Math.random() * 20;
+        jerkIn = Math.max(14, 42 - level * 2.2) + Math.random() * 20;
       }
 
       function talk(t){
@@ -104,16 +105,32 @@ window.GAMES.tennis = (function(){
         ring.classList.add("on");
 
         var d = Math.hypot(px - x, py - y);
+
         if(d < RADIUS){
           hits++;
+          streak = 0;
+          level++;
           score.textContent = hits + " / " + NEED;
           if(hits >= NEED) return win();
           talk(hits === 10 ? "Halfway. It is getting worse." :
-               hits === NEED - 2 ? "Two left. Good luck." : "Returned.");
+               hits === NEED - 2 ? "Two left." : "Returned.");
           launch();
+
         } else {
           misses++;
+          streak++;
           missBox.textContent = misses + (misses === 1 ? " miss" : " misses");
+
+          if(streak >= RESET_AFTER){
+            streak = 0;
+            level = 0;
+            api.fail(function(){
+              talk("Five in a row. The ball slows down. Take it again.");
+              launch();
+            });
+            return;
+          }
+
           var lost = hits > 0 && misses % 2 === 0;
           if(lost) hits--;
           score.textContent = hits + " / " + NEED;
