@@ -20,7 +20,7 @@ window.GAMES.tennis = (function(){
       var RAMP = 0.42;          // aggressive: gets hard fast
       var CAP  = 9.0;
 
-      root.appendChild(api.plate(9, "Erratic Tennis"));
+      root.appendChild(api.plate(9, "Bed Stuy Tennis"));
 
       var s = api.stage();
       root.appendChild(s);
@@ -42,7 +42,7 @@ window.GAMES.tennis = (function(){
       var ring = api.el("div","ring");
       court.appendChild(ring);
 
-      var line = api.el("div","note","Tap the ball. It will not cooperate.");
+      var line = api.el("div","note","Now try to play on that side");
       s.appendChild(line);
 
       var W = 0, H = 0;
@@ -125,7 +125,7 @@ window.GAMES.tennis = (function(){
             streak = 0;
             level = 0;
             api.fail(function(){
-              talk("Five in a row. The ball slows down. Take it again.");
+              talk("Five in a row!!!! Come on Pirate");
               launch();
             });
             return;
@@ -165,7 +165,7 @@ window.GAMES.tennis = (function(){
         s.innerHTML = "";
         s.appendChild(api.carlos(
           misses === 0 ? "Twenty for twenty, no misses. Julie is going to hear about this."
-                       : "Twenty returns. " + misses + " swings at open air. Still a win."));
+                       : "Your racket had holes today ? "));
         s.appendChild(api.button("Continue","solid",function(){ api.next(); }));
       }
 
