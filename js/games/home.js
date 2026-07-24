@@ -14,7 +14,7 @@ window.GAMES.home = (function(){
     mount: function(root, api){
       clearAll();
 
-      root.appendChild(api.plate(12, "Arrival"));
+      root.appendChild(api.plate(12, "YAYYYY let's make bolinhos!"));
 
       var s = api.stage();
       root.appendChild(s);
@@ -28,10 +28,6 @@ window.GAMES.home = (function(){
       caption.style.transition = "opacity .8s ease";
       s.appendChild(caption);
 
-      var title = api.el("div","welcome","Welcome back to Bed Stuy");
-      title.style.opacity = "0";
-      title.style.transition = "opacity .8s ease";
-      s.appendChild(title);
 
       var beer = api.img(A.beers[3], "photo");
       beer.style.maxHeight = "24vh";
@@ -45,9 +41,7 @@ window.GAMES.home = (function(){
       s.appendChild(beerCap);
 
       var letter = api.el("div","letter",
-        "<p>You made it through flags, traffic, my trash, my sleeping, " +
-        "four beers, five typefaces, one impossible tennis ball, " +
-        "a country club and two eggs.</p>" +
+        "<p>You made it through flags, traffic, my trash, my sleeping.</p>" +
         "<p>The airport was never the point. Come home.</p>" +
         "<p class='sign'>\u2014 Julie</p>");
       letter.style.opacity = "0";
