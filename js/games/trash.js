@@ -8,15 +8,14 @@ window.GAMES.trash = {
         q:"What is Julie's new address?",
         accept: function(v){ return v.indexOf("322") >= 0 && v.indexOf("graham") >= 0; },
         nudge:"Number and street, Laura. You have been there.",
-        ok:"Correct. You may keep the keys." },
+        ok:"Correct you can ship presents." },
 
       { type:"choice",
         q:"Why are all the car ads the same????",
         options:[
-          { label:"Because men made them", say:"Sure. Still the same." },
-          { label:"Because of the drone shot", say:"The drone shot is not the point." },
+          { label:"Because men made them", say:"ily" },
           { label:"Because of the empty highway", say:"The highway is always empty. Why." },
-          { label:"There is no answer", say:"Correct. There is no answer." }
+          { label:"There is no answer", say:"obviously it's bc of the men." }
         ],
         free:true },
 
@@ -24,10 +23,10 @@ window.GAMES.trash = {
         q:"What is the secret thing Julie really wants to do with you?",
         options:[
           { label:"Create stuff", correct:true },
-          { label:"Shopping", say:"Naughty girl." },
+          { label:"Shopping wink", say:"Naughty girl." },
           { label:"Make more eggs", say:"That is not a secret." }
         ],
-        ok:"Correct. She has been waiting for you to say it." },
+        ok:"She has been waiting for you to say it." },
 
       { type:"text",
         q:"What is Julie's favourite festa?",
@@ -54,8 +53,7 @@ window.GAMES.trash = {
     var i = 0;
     var perQ = Math.ceil(SPOTS.length / QUESTIONS.length);
 
-    root.appendChild(api.plate(4, "The Living Room",
-      "Bed Stuy, interior \u2014 refuse, questions, one woman"));
+    root.appendChild(api.plate(4, "The OCD MCQ";
 
     var s = api.stage();
     root.appendChild(s);
