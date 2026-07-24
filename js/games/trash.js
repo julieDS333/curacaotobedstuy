@@ -53,7 +53,7 @@ window.GAMES.trash = {
     var i = 0;
     var perQ = Math.ceil(SPOTS.length / QUESTIONS.length);
 
-    root.appendChild(api.plate(4, "The OCD MCQ";
+    root.appendChild(api.plate(4, "The OCD MCQ"));
 
     var s = api.stage();
     root.appendChild(s);
