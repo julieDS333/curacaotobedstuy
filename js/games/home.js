@@ -41,14 +41,14 @@ window.GAMES.home = (function(){
       s.appendChild(beerCap);
 
       var letter = api.el("div","letter",
-        "<p>You made it through flags, traffic, my trash, my sleeping.</p>" +
+        "<p>You made it through the impossible truck and tennis ball games .</p>" +
         "<p>The airport was never the point. Come home.</p>" +
         "<p class='sign'>\u2014 Julie</p>");
       letter.style.opacity = "0";
       letter.style.transition = "opacity .8s ease";
       s.appendChild(letter);
 
-      var july = api.el("div","july","and in July, Adrian is still free");
+      var july = api.el("div","july","No need for a PJ");
       july.style.opacity = "0";
       july.style.transition = "opacity 1.2s ease";
       s.appendChild(july);
