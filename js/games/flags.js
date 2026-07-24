@@ -11,7 +11,7 @@ window.GAMES.flags = {
 
     var r = 0;
 
-    root.appendChild(api.plate(2, "Assembly", "Two flags, disassembled — shapes on paper"));
+    root.appendChild(api.plate(2, "Vexy what ?!"));
     var s = api.stage();
     root.appendChild(s);
 
