@@ -5,15 +5,13 @@ window.GAMES.intro = {
     var beat = 0;
 
     var LINES = [
-      "Laura. You might recognize me, Carlos.",
-      "You are in an airport. I am an oracle. Neither of us chose this.",
-      "The universe has looked at your departure time and declined to comment.",
-      "Ten trials stand between this terminal and your apartment. Flags. A truck. A woman who will fall asleep...",
-      "The cards mention a pombinha. WTF is a pombinha?.",
+      "Laura. You might recognize me Carliiiito.",
+      "While all those suckers are waiting in the airport",
+      "Your gf made 10 games for you, including some you will hate.",
+      "Flags ofc. You guessed it, a truck. Dragons...",
+      "The univers also mentions a pombinha. WTF is a pombinha?.",
       "Ready?"
     ];
-
-    root.appendChild(api.plate(1, "Departure", "Curaçao — indefinite delay, mixed media"));
 
     var s = api.stage();
 
