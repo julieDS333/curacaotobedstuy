@@ -19,9 +19,8 @@ var App = (function(){
     return i;
   }
 
-  function plate(n, title, sub){
+function plate(n, title, sub){
     var p = el("div","plate");
-    p.appendChild(el("div","no","Plate " + (n < 10 ? "0" + n : n)));
     p.appendChild(el("h1", null, title));
     if(sub) p.appendChild(el("p", null, sub));
     return p;
